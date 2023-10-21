@@ -1,0 +1,17 @@
+{% include "header.html" %}
+
+    <div class="container" style="margin-top: 5rem;">
+        <h1>未審核</h1>
+        <br>
+        <br>
+        {% if cafe %}
+            {% for c in cafe: %}
+                <a href="{{ url_for('edit', cafe_id=c.id) }}"><h3>{{ c.name }}</h3></a>
+                <h3>   上傳者:{{ c.provider.username }}</h3>
+            {% endfor %}
+        {% else: %}
+            <p>沒有未審核的名單</p>
+        {% endif %}
+    </div>
+
+{% include "footer.html" %}

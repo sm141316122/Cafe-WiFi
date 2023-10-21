@@ -1,0 +1,235 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% include "header.html" %}
+
+    <div class="container" style="margin-top: 5rem;">
+        <h1>
+            {{ cafe.name }}&nbsp;&nbsp;
+            {% if cafe.avg_rating != "0": %}
+                {{ cafe.avg_rating }}
+            {% else: %}
+                尚未評分
+            {% endif %}
+            &nbsp;&nbsp;
+        </h1><br>
+        <div class="row">
+            <div class="col-6">
+                <img src="{{ url_for('static', filename='images/cafe.jpg') }}" style="width: 100%">
+            </div>
+
+            <div class="col-6">
+                <br>
+                <div>
+                    <h3>評論</h3>
+                    <hr>
+                    {% if cafe.comments %}
+                        <div style="height:300px;overflow-y:auto">
+                            {% for comment in cafe.comments %}
+                                <div>
+                                    <h5>
+                                        {{ comment.comment_author.username }}
+                                        {% for r in cafe.cafe_rating %}
+                                            {% if r.author_id == comment.comment_author.id %}
+                                                {% if r.rating != 0 %}
+                                                    {% for n in range(r.rating) %}
+                                                        ⭐
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endif%}
+                                        {% endfor %}
+                                    </h5>
+                                    <div>
+                                        <p>{{ comment.text | safe }}</p>
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <h5>尚未留下評論</h5>
+                    {% endif %}
+                </div>
+                <br>
+                <button class="btn btn-secondary" type="button">
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#{{ cafe.id }}comment" href="#">
+                        評論
+                    </a>
+                </button>
+                <button class="btn btn-secondary" type="button">
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#{{ cafe.id }}" href="#">
+                        評分
+                    </a>
+                </button>
+            </div>
+
+        </div>
+        <hr>
+        <br>
+        <h3>店家資訊</h3>
+        <div class="row my-5">
+            <div class="col-6">
+                <div class="row">
+
+                    <div class="col-6">
+                        有無WiFi
+                    </div>
+                    <br><br>
+                    <div class="col">
+                        {{ cafe.wifi }}
+                    </div>
+                    <div class="col-6">
+                        有賣甜點
+                    </div>
+                    <br><br>
+                    <div class="col">
+                        {{ cafe.dessert }}
+                    </div>
+                    <div class="col-6">
+                        有賣正餐
+                    </div>
+                    <br><br>
+                    <div class="col">
+                        {{ cafe.meal }}
+                    </div>
+                    <div class="col-6">
+                        有無限時
+                    </div>
+                    <br><br>
+                    <div class="col">
+                        {{ cafe.time }}
+                    </div>
+                    <div class="col-6">
+                        插座
+                    </div>
+                    <br><br>
+                    <div class="col-6">
+                        {{ cafe.power }}
+                    </div>
+                    <div>
+                        <br><h3>營業時間</h3>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-6 py-2">週一</div>
+                            <div class="col-6 py-2">{{ hour.mon }}</div>
+                            <div class="col-6 py-2">週二</div>
+                            <div class="col-6 py-2">{{ hour.tue }}</div>
+                            <div class="col-6 py-2">週三</div>
+                            <div class="col-6 py-2">{{ hour.wed }}</div>
+                            <div class="col-6 py-2">週四</div>
+                            <div class="col-6 py-2">{{ hour.thu }}</div>
+                            <div class="col-6 py-2">週五</div>
+                            <div class="col-6 py-2">{{ hour.fri }}</div>
+                            <div class="col-6 py-2">週六</div>
+                            <div class="col-6 py-2">{{ hour.sat }}</div>
+                            <div class="col-6 py-2">週日</div>
+                            <div class="col-6 py-2">{{ hour.sun }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                網站&nbsp;:&nbsp;
+                {% if cafe.official_website == "未提供" %}
+                    未提供
+                {% else: %}
+                    <a href="{{ cafe.official_website }}" target="_blank">點擊前往</a>
+                {% endif %}
+                <br><br>
+                地址&nbsp;:&nbsp;{{ cafe.address }}
+                <br><br>
+                {% if cafe.google_map %}
+                    <iframe src="{{ cafe.google_map }}" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                {% endif %}
+            </div>
+
+            <div class="col-12">
+                <br>
+                {% if current_user.is_authenticated and current_user.id == 1: %}
+                    <button class="btn btn-secondary" type="button" onclick="location.href='{{ url_for('edit', cafe_id=cafe.id) }}'">修改</button>
+                    <button class="btn btn-danger" type="button" onclick="location.href='{{ url_for('delete_cafe', cafe_id=cafe.id) }}'">刪除</button>
+                {% endif %}
+                <br>
+            </div>
+        </div>
+    </div>
+
+
+<!-- 跳出評分 -->
+    <div class="modal fade" id="{{ cafe.id }}" tabindex="-1" aria-labelledby="ratingCafeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" id="view{{ cafe.id }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="ratingCafeLabel">評分</h3>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('cafe_page', cafe_id=cafe.id) }}" method="POST" >
+                    <div class="modal-body">
+                        <br>
+                        <div class="text-center">
+                            {% if current_user.is_authenticated %}
+                                {% for r in cafe.cafe_rating %}
+                                    {% if r.author_id == current_user.id %}
+                                        {% if r.rating != 0 %}
+                                        <p>你已評分為 {{ r.rating }}</p>
+                                        {% endif %}
+                                    {% endif%}
+                                {% endfor %}
+                                評分
+                                <select name="rating">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            {% else %}
+                                <p>登入後可評分</p>
+                                <button type="button" class="btn btn-outline-secondary" onclick="location.href='{{ url_for('register') }}'">註冊</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="location.href='{{ url_for('login') }}'">登入</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="modal-footer">
+                        {% if current_user.is_authenticated %}
+                            <button type="submit" class="btn btn-outline-secondary">儲存</button>
+                        {% endif %}
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">關閉</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- 跳出評論 -->
+    <div class="modal fade" id="{{ cafe.id }}comment" tabindex="-1" aria-labelledby="commentCafeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" id="view{{ cafe.id }}comment">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="commentCafeLabel">評論</h3>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('cafe_page', cafe_id=cafe.id) }}" method="POST" >
+                    <div class="modal-body">
+                        <br>
+                        <div class="text-center">
+                            {% if current_user.is_authenticated %}
+                                {{ ckeditor.load() }}
+                                {{ ckeditor.config(name='body') }}
+                                {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "secondary"}) }}
+                            {% else %}
+                                <p>登入後可評分</p>
+                                <button type="button" class="btn btn-outline-secondary" onclick="location.href='{{ url_for('register') }}'">註冊</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="location.href='{{ url_for('login') }}'">登入</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br><br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% include "footer.html" %}

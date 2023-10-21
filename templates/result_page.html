@@ -1,0 +1,35 @@
+{% include "header.html" %}
+
+    {% if is_search: %}
+        <h1 style="margin-top: 5rem; margin-left: 5rem; font-size: 3em">搜尋結果</h1>
+    {% else: %}
+        <h1 style="margin-top: 5rem; margin-left: 5rem; font-size: 3em">{{ key_word }}</h1>
+    {% endif %}
+    <br>
+    <hr>
+    <div class="container" style="margin-top: 5rem;">
+        {% if cafes: %}
+            {% for cafe in cafes: %}
+                <div class="list-group">
+                    <a href="{{ url_for('cafe_page', cafe_id=cafe.id) }}" class="list-group-item list-group-item-light list-group-item-action">
+                        <div class="row">
+                            <div class="col-4">{{ cafe.name }}</div>
+                            <div class="col-2">{{ cafe.city }}</div>
+                            <div class="col-2">{{ cafe.avg_rating }}</div>
+                            <div class="col-4">{{ cafe.address }}</div>
+                        </div>
+                    </a>
+                <br>
+                </div>
+            {% endfor %}
+        {% else: %}
+            {% if is_search: %}
+                無查詢結果
+            {% else: %}
+                尚未新增咖啡廳
+            {% endif %}
+        {% endif %}
+        <br><br>
+    </div>
+
+{% include "footer.html" %}

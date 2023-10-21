@@ -1,0 +1,98 @@
+{% include "header.html" %}
+
+    <div class="container py-5">
+        <br>
+        <div class="row">
+            <div class="col-6">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages: %}
+                        {% for message in messages: %}
+                            <p style="color: red">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <form action="{{ url_for('edit', cafe_id=cafe.id) }}" method="POST">
+                    所在縣市
+                    <select name="city" required>
+                        <option value="{{ cafe.city }}">{{ cafe.city }}</option>
+                        <option value="台北">台北</option>
+                        <option value="基隆">基隆</option>
+                        <option value="桃園">桃園</option>
+                        <option value="新竹">新竹</option>
+                        <option value="苗栗">苗栗</option>
+                        <option value="台中">台中</option>
+                        <option value="南投">南投</option>
+                        <option value="彰化">彰化</option>
+                        <option value="雲林">雲林</option>
+                        <option value="嘉義">嘉義</option>
+                        <option value="台南">台南</option>
+                        <option value="高雄">高雄</option>
+                        <option value="屏東">屏東</option>
+                        <option value="宜蘭">宜蘭</option>
+                        <option value="花蓮">花蓮</option>
+                        <option value="台東">台東</option>
+                        <option value="澎湖">澎湖</option>
+                    </select><br><br>
+                    店名
+                    <input name="name" required value="{{ cafe.name }}">
+                    (若有分店，請註明分店)<br><br>
+                    地址
+                    <input name="address" required style="width: 100%" value="{{ cafe.address }}"><br><br><br>
+                    有提供WiFi&nbsp;&nbsp;&nbsp;&nbsp;
+                    <select name="wifi" required>
+                        <option value="{{ cafe.wifi }}">{{ cafe.wifi }}</option>
+                        <option value="有">有</option>
+                        <option value="無">無</option>
+                        <option value="未提供">未提供</option>
+                    </select> <br><br>
+                    有賣甜點&nbsp;&nbsp;&nbsp;&nbsp;
+                    <select name="dessert" required>
+                        <option value="{{ cafe.dessert }}">{{ cafe.dessert }}</option>
+                        <option value="有">有</option>
+                        <option value="無">無</option>
+                        <option value="未提供">未提供</option>
+                    </select> <br><br>
+                    有賣正餐&nbsp;&nbsp;&nbsp;&nbsp;
+                    <select name="meal" required>
+                        <option value="{{ cafe.meal }}">{{ cafe.meal }}</option>
+                        <option value="有">有</option>
+                        <option value="無">無</option>
+                        <option value="未提供">未提供</option>
+                    </select> <br><br>
+                    有無限時&nbsp;&nbsp;&nbsp;&nbsp;
+                    <select name="time" required>
+                        <option value="{{ cafe.time }}">{{ cafe.time }}</option>
+                        <option value="有">有</option>
+                        <option value="無">無</option>
+                        <option value="未提供">未提供</option>
+                    </select> <br><br>
+                    插座&nbsp;&nbsp;&nbsp;&nbsp;
+                    <select name="power" required>
+                        <option value="{{ cafe.power }}">{{ cafe.power }}</option>
+                        <option value="有">有</option>
+                        <option value="無">無</option>
+                        <option value="未提供">未提供</option>
+                    </select> <br><br>
+                    官網&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input name="website" style="width: 100%" value="{{ cafe.official_website }}"><br><br>
+                    營業時間&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+                    週一&nbsp;&nbsp;<input name="mon-open" style="width: 20%" value="{{ hour.mon[:5] }}">~<input name="mon-close" style="width: 20%" value="{{ hour.mon[8:] }}"><br><br>
+                    週二&nbsp;&nbsp;<input name="tue-open" style="width: 20%" value="{{ hour.tue[:5] }}">~<input name="tue-close" style="width: 20%" value="{{ hour.tue[8:] }}"><br><br>
+                    週三&nbsp;&nbsp;<input name="wed-open" style="width: 20%" value="{{ hour.wed[:5] }}">~<input name="wed-close" style="width: 20%" value="{{ hour.wed[8:] }}"><br><br>
+                    週四&nbsp;&nbsp;<input name="thu-open" style="width: 20%" value="{{ hour.thu[:5] }}">~<input name="thu-close" style="width: 20%" value="{{ hour.thu[8:] }}"><br><br>
+                    週五&nbsp;&nbsp;<input name="fri-open" style="width: 20%" value="{{ hour.fri[:5] }}">~<input name="fri-close" style="width: 20%" value="{{ hour.fri[8:] }}"><br><br>
+                    週六&nbsp;&nbsp;<input name="sat-open" style="width: 20%" value="{{ hour.sat[:5] }}">~<input name="sat-close" style="width: 20%" value="{{ hour.sat[8:] }}"><br><br>
+                    週日&nbsp;&nbsp;<input name="sun-open" style="width: 20%" value="{{ hour.sun[:5] }}">~<input name="sun-close" style="width: 20%" value="{{ hour.sun[8:] }}"><br><br>
+                    Google Map
+                    <br>
+                    <input name="map" style="width: 100%" value="{{ cafe.google_map }}">
+                    <button class="btn btn-outline-secondary" type="button" onclick="location.href='{{ url_for('insert_map', cafe_id=cafe.id) }}'">嵌入地圖</button><br><br>
+                    <button class="btn btn-secondary" type="submit" style="width: 25%">資料確認</button>
+                    <button class="btn btn-secondary" type="button" onclick="history.back()" style="width: 25%">取消</button>
+                    <button class="btn btn-danger" type="button" onclick="location.href='{{ url_for('delete_cafe', cafe_id=cafe.id) }}'" style="width: 25%">刪除</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% include "footer.html" %}

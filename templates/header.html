@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & WiFi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+
+    <!----------  導航欄  ---------->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="{{ url_for('home') }}">Cafe & WiFi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-2 mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#chooseCity" href="#">選擇城市</a>
+                    </li>
+
+                    <li class="nav-item">
+                        {% if current_user.is_authenticated: %}
+                            <a class="nav-link" href="{{ url_for('add_new_cafe') }}">新增店家</a>
+                        {% else: %}
+                            <a class="nav-link" href="{{ url_for('login') }}">新增店家</a>
+                        {% endif %}
+                    </li>
+
+                </ul>
+
+                <!----------  搜尋框  ---------->
+                <form class="d-flex me-auto" role="search" action="{{ url_for('result_page', key_word='搜尋') }}" method="POST">
+                    <input class="form-control me-2" type="text" placeholder="尋找咖啡廳" aria-label="搜尋" name="search">
+                    <button class="btn btn-light text-nowrap" type="submit">搜尋</button>
+                </form>
+
+                <ul class="navbar-nav me-2 mb-2 mb-lg-0">
+                    {% if current_user.is_authenticated: %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">{{ current_user.username }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('logout') }}">登出</a>
+                        </li>
+                    {% else: %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('register') }}">註冊</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('login') }}">登入</a>
+                        </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+
+            <!----------  城市選擇跳出視窗  ---------->
+            <div class="modal fade" id="chooseCity" tabindex="-1" aria-labelledby="chooseCityLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="chooseCityLabel">選擇城市</h5>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row row-cols-1 row-cols-md-2">
+                                    {% for city in ["台北", "基隆", "桃園", "新竹", "苗栗", "台中", "南投","彰化", "雲林",
+                                                    "嘉義", "台南", "高雄", "屏東", "宜蘭", "花蓮", "台東", "澎湖"]: %}
+                                        <div class="col py-2">
+                                            <div class="card bg-light text-center">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ city }}</h5>
+                                                    <a class="btn btn-outline-secondary" href="{{ url_for('result_page', key_word=city) }}">清單</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+

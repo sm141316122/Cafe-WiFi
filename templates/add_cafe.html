@@ -1,0 +1,89 @@
+{% include "header.html" %}
+
+    <div class="container py-5">
+        {% with messages = get_flashed_messages() %}
+            {% if messages: %}
+                {% for message in messages: %}
+                    <p style="color: red">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h3>Cafe&WiFi 新增店家</h3>
+        <br>
+        <div class="row">
+            <div class="col-6">
+                <form action="{{ url_for('add_new_cafe') }}" method="POST">
+                    *所在縣市
+                    <select name="city" required>
+                        <option value="">請選擇</option>
+                        <option value="台北">台北</option>
+                        <option value="基隆">基隆</option>
+                        <option value="桃園">桃園</option>
+                        <option value="新竹">新竹</option>
+                        <option value="苗栗">苗栗</option>
+                        <option value="台中">台中</option>
+                        <option value="南投">南投</option>
+                        <option value="彰化">彰化</option>
+                        <option value="雲林">雲林</option>
+                        <option value="嘉義">嘉義</option>
+                        <option value="台南">台南</option>
+                        <option value="高雄">高雄</option>
+                        <option value="屏東">屏東</option>
+                        <option value="宜蘭">宜蘭</option>
+                        <option value="花蓮">花蓮</option>
+                        <option value="台東">台東</option>
+                        <option value="澎湖">澎湖</option>
+                    </select><br><br>
+                    *店名
+                    <input name="name" required>
+                    (若有分店，請註明分店)<br><br>
+                    *地址
+                    <input name="address" required style="width: 100%"><br><br><br>
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfo" aria-expanded="false" aria-controls="collapseInfo">
+                        我要提供更完整資訊
+                    </button>
+                    <br><br>
+                    <div class="collapse" id="collapseInfo">
+                        評分
+                        <select name="rating">
+                            <option value="">不評分</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <br><br>
+                        有提供WiFi&nbsp;&nbsp;
+                        <input type="radio" name="wifi" value="有">&nbsp;有
+                        <input type="radio" name="wifi" value="無">&nbsp;無 <br><br>
+                        有賣甜點&nbsp;&nbsp;
+                        <input type="radio" name="dessert" value="有">&nbsp;有
+                        <input type="radio" name="dessert" value="無">&nbsp;無 <br><br>
+                        有賣正餐&nbsp;&nbsp;
+                        <input type="radio" name="meal" value="有">&nbsp;有
+                        <input type="radio" name="meal" value="無">&nbsp;無 <br><br>
+                        有無限時&nbsp;&nbsp;
+                        <input type="radio" name="time" value="有">&nbsp;有
+                        <input type="radio" name="time" value="無">&nbsp;無 <br><br>
+                        插座&nbsp;&nbsp;
+                        <input type="radio" name="power" value="有">&nbsp;有
+                        <input type="radio" name="power" value="無">&nbsp;無 <br><br>
+                        網站&nbsp;&nbsp;
+                        <input name="website" style="width: 100%"><br><br>
+                        營業時間&nbsp;&nbsp;<br><br>
+                        週一&nbsp;&nbsp;<input name="mon-open" style="width: 20%" value="00:00">~<input name="mon-close" style="width: 20%" value="00:00"><br><br>
+                        週二&nbsp;&nbsp;<input name="tue-open" style="width: 20%" value="00:00">~<input name="tue-close" style="width: 20%" value="00:00"><br><br>
+                        週三&nbsp;&nbsp;<input name="wed-open" style="width: 20%" value="00:00">~<input name="wed-close" style="width: 20%" value="00:00"><br><br>
+                        週四&nbsp;&nbsp;<input name="thu-open" style="width: 20%" value="00:00">~<input name="thu-close" style="width: 20%" value="00:00"><br><br>
+                        週五&nbsp;&nbsp;<input name="fri-open" style="width: 20%" value="00:00">~<input name="fri-close" style="width: 20%" value="00:00"><br><br>
+                        週六&nbsp;&nbsp;<input name="sat-open" style="width: 20%" value="00:00">~<input name="sat-close" style="width: 20%" value="00:00"><br><br>
+                        週日&nbsp;&nbsp;<input name="sun-open" style="width: 20%" value="00:00">~<input name="sun-close" style="width: 20%" value="00:00"><br><br>
+                    </div><br><br>
+                    <button class="btn btn-secondary" type="submit" style="width: 100%">送出店家資料</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% include "footer.html" %}

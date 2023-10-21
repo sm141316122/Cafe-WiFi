@@ -1,0 +1,115 @@
+{% include "header.html" %}
+
+    <section class="py-5 text-center container ">
+        <h1 class="fw-light py-3">Cafe & WiFi</h1>
+    </section>
+    <!----------  最近新增版面  ---------->
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <h1>最近新增</h1>
+            <br>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                {% for cafe in cafes: %}
+                    <div class="col">
+                        <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#{{ cafe.id }}" href="#">
+                            <div class="card shadow-sm">
+                                <img src="{{ url_for('static', filename='images/cafe.jpg') }}">
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <h3 class="card-text py-2">
+                                {{ cafe.name }}<br>
+                                {% if cafe.avg_rating != "0": %}
+                                    {{ cafe.avg_rating }}
+                                {% else: %}
+                                    尚未評分
+                                {% endif %}
+                            </h3>
+                            {% if current_user.is_authenticated and current_user.id == 1: %}
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='{{ url_for('edit', cafe_id=cafe.id) }}'">修改</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='{{ url_for('delete_cafe', cafe_id=cafe.id) }}'">刪除</button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!----------  個別咖啡廳跳出視窗  ---------->
+                    <div class="modal fade" id="{{ cafe.id }}" tabindex="-1" aria-labelledby="viewCafeLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered" id="view{{ cafe.id }}">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title" id="viewCafeLabel">{{ cafe.name }}</h3>
+                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <img src="{{ url_for('static', filename='images/cafe.jpg') }}" style="width: 100%">
+                                    </div>
+                                    <br>
+                                    <h4>店家資訊</h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-3 py-2">有無WiFi</div>
+                                        <div class="col-3 py-2">{{ cafe.wifi }}</div>
+                                        <div class="col-3 py-2">有賣甜點</div>
+                                        <div class="col-3 py-2">{{ cafe.dessert }}</div>
+                                        <div class="col-3 py-2">有賣正餐</div>
+                                        <div class="col-3 py-2">{{ cafe.meal }}</div>
+                                        <div class="col-3 py-2">有無限時</div>
+                                        <div class="col-3 py-2">{{ cafe.time }}</div>
+                                        <div class="col-3 py-2">插座</div>
+                                        <div class="col-3 py-2">{{ cafe.power }}</div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="row">
+                                                {% for hour in cafe.business_hours: %}
+                                                    <div class="col-6 py-2">週一</div>
+                                                    <div class="col-6 py-2">{{ hour.mon }}</div>
+                                                    <div class="col-6 py-2">週二</div>
+                                                    <div class="col-6 py-2">{{ hour.tue }}</div>
+                                                    <div class="col-6 py-2">週三</div>
+                                                    <div class="col-6 py-2">{{ hour.wed }}</div>
+                                                    <div class="col-6 py-2">週四</div>
+                                                    <div class="col-6 py-2">{{ hour.thu }}</div>
+                                                    <div class="col-6 py-2">週五</div>
+                                                    <div class="col-6 py-2">{{ hour.fri }}</div>
+                                                    <div class="col-6 py-2">週六</div>
+                                                    <div class="col-6 py-2">{{ hour.sat }}</div>
+                                                    <div class="col-6 py-2">週日</div>
+                                                    <div class="col-6 py-2">{{ hour.sun }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            網站&nbsp;:&nbsp;
+                                            {% if cafe.official_website == "未提供" %}
+                                                未提供
+                                            {% else: %}
+                                                <a href="{{ cafe.official_website }}" target="_blank">點擊前往</a>
+                                            {% endif %}
+                                            <br><br>
+                                            地址&nbsp;:&nbsp;{{ cafe.address }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ url_for('cafe_page', cafe_id=cafe.id) }}">
+                                        <button type="button" class="btn btn-outline-secondary">主頁</button>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">關閉</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+{% include "footer.html" %}
