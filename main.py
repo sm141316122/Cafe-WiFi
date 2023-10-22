@@ -10,18 +10,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 
-# 會員
-# 編輯者才可訪問和操作
-# 修改
-# 評論
-
-# 困難點1: user, cafe 資料庫的 relationship cafe 的 provider 會 return none
-# 解法: add cafe 時要加 provider
-
-# 困難點2: admin decorator 會AssertError
-# 解法: 要加 @wraps(function) (先 from functools import wraps)
-
-
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
